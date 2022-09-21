@@ -1,8 +1,18 @@
+import { useEffect } from 'react';
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { fetchData, fetchDataAsync } from './api/services';
 
 export default function Home() {
+  useEffect(() => {
+    fetchDataAsync()
+      .then((res) => {
+        console.log("res: ", res);
+      })
+      .catch((err) => console.log("err: ", err));
+  }, [])
+
   return (
     <div className={styles.container}>
       <Head>
