@@ -8,10 +8,19 @@ const axios = require('axios');
 
 
 
-export async function fetchDataAsync() {
+export async function searchUsers(username) {
   try {
-    const res = await axios.get("https://api.github.com/users/devkapilbansal");
-    return res.data.name;
+    const res = await axios.get(`https://api.github.com/search/users?q=${username}`);
+    return res.data;
+  } catch (err) {
+    return err.message;
+  }
+}
+
+export async function searchRepositories() {
+  try {
+    const res = await axios.get("https://api.github.com/search/repositories?q=tetris&1");
+    return res.data;
   } catch (err) {
     return err.message;
   }

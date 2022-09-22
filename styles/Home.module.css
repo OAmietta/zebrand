@@ -3,7 +3,9 @@
 }
 
 .main {
-  min-height: 100vh;
+  min-height: 90vh;
+  max-width: 500px;
+  margin: auto;
   padding: 4rem 0;
   flex: 1;
   display: flex;
