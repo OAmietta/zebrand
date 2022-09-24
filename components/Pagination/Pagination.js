@@ -57,9 +57,6 @@ const Pagination = (props) => {
               selected: pageNumber === currentPage,
             })}
             onClick={() => onPageChange(pageNumber)}
-          // data-mdb-toggle="collapse"
-          // data-mdb-target={`.true`} aria-expanded="false" aria-controls={`true`}
-          // role="button"
           >
             {pageNumber}
           </li>

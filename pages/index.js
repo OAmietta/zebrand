@@ -1,34 +1,9 @@
-import { useEffect } from 'react';
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import { searchRepositories, searchUsers } from './api/services';
-import { useSelector, useDispatch } from 'react-redux'
-import { setUser, userValue } from '../slices/index';
 import { useRouter } from 'next/router';
 
 export default function Home() {
   const router = useRouter();
-  const user = useSelector(userValue);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    searchRepositories()
-      .then((res) => {
-        console.log("searchRepositories: ", res);
-      })
-      .catch((err) => console.log("errRepo: ", err));
-    searchUsers()
-      .then((res) => {
-        console.log("res: ", res);
-        dispatch(setUser(res))
-      })
-      .catch((err) => console.log("err: ", err));
-  }, [])
-
-  useEffect(() => {
-    console.log("users: ", user);
-  }, [user]);
-
 
   return (
     <div className={styles.container}>
@@ -39,8 +14,8 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <button onClick={() => router.push("/userSearch")} >UserSearch</button>
-        <button onClick={() => router.push("/repositorieSearch")} >RepositorieSearch</button>
+        <button className='btn btn-primary' onClick={() => router.push("/userSearch")} >SEARCH USERS</button>
+        <button className='btn btn-outline-primary' onClick={() => router.push("/repositorieSearch")} >SEARCH REPOSITORIES</button>
       </main>
     </div >
   )

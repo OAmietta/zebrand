@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -7,7 +8,7 @@ export default function NavBar() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container">
-                <a className="navbar-brand me-2" href="https://zebrands.mx/">
+                <a className="navbar-brand me-2" href="/">
                     <Image
                         src="https://zebrands.mx/wp-content/uploads/2021/07/WEB-ZEB-05-1-127x36.png"
                         height={30}
@@ -32,7 +33,7 @@ export default function NavBar() {
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0" />
                     <div className="d-flex align-items-center">
                         {
-                            router.pathname.includes("repositorie") && (
+                            router.query.dataSearch?.includes("repositorie") && (
                                 <>
                                     <button onClick={() => router.push("/userSearch")} type="button" className="btn btn-primary me-3">
                                         Search users
@@ -41,7 +42,7 @@ export default function NavBar() {
                             )
                         }
                         {
-                            router.pathname.includes("user") && (
+                            router.query.dataSearch?.includes("user") && (
                                 <>
                                     <button onClick={() => router.push("/repositorieSearch")} type="button" className="btn btn-primary me-3">
                                         Search repositories
