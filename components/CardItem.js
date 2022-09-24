@@ -15,12 +15,12 @@ export default function CardItem(props) {
                 <strong className="cPrimary overflow-hidden">{name.length > 20 ? name.substring(0, 20) : name}</strong>
                 {
                     itemData.login == undefined ? (
-                        <div>
-                            <strong className="cGray">{`created by`}</strong> {itemData.owner.login}
+                        <div className="d-flex">
+                            <strong className="cGray">{`created by`}&nbsp;</strong> <p>{itemData.owner.login}</p>
                         </div>
                     ) : (
-                        <div>
-                            <strong className="cGray">ID</strong> {itemData.id}
+                        <div className="d-flex">
+                            <strong className="cGray">ID&nbsp;</strong><p>{itemData.id}</p>
                         </div>
                     )
                 }
