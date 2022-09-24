@@ -23,7 +23,7 @@
 }
 
 .cGray {
-  color: gray;
+  color: var(--base);
 }
 
 /*SEARCHBAR*/
