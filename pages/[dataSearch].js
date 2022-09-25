@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { dataValue, setData } from '../slices/index';
+import { dataValue, setData, inputSearch, setInputSearch, currentPageValue, setCurrentPageValue } from '../slices/index';
 import { useRouter } from 'next/dist/client/router';
 import CardItem from "../components/CardItem"
 import SearchBar from '../components/SearchBar';
@@ -34,21 +34,23 @@ export async function getServerSideProps(context) {
 
 /**
  * @param {array} dataArray -- Array of data from redux store.
- * @param {string} paramValue -- Input value of the search bar.
+ * @param {integer} currentPage -- Current page of data displayed.
+ * @param {string} inputSearchValue -- Input value of the search bar.
  * @param {boolean} paramValueChange -- (Flag) Don't search if the input value doesn't change.
  * @param {boolean} loading -- (Flag) Shows loading spinner when true.
- * @param {integer} currentPage -- Current page of data displayed.
 */
 
 export default function UserSearch({ data }) {
     const router = useRouter();
     const dataArray = useSelector(dataValue);
-    const [paramValue, setParamValue] = useState("");
+    const inputSearchValue = useSelector(inputSearch);
+    const currentPage = useSelector(currentPageValue);
+    const dispatch = useDispatch();
+
     const [paramValueChange, setParamValueChange] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
     let pageSize = 5;
-    const dispatch = useDispatch();
+
 
     useEffect(() => {
         dispatch(setData(data));
@@ -56,12 +58,14 @@ export default function UserSearch({ data }) {
 
 
     const handleSearch = async () => {
+        //Search only if the input value changes.
         if (paramValueChange) {
             setParamValueChange(false);
             setLoading(true);
-            if (paramValue != "") {
+            //If the input value is empty, load default data redirecting (server side rendering).
+            if (inputSearchValue != "") {
                 if (router.query.dataSearch.includes("user")) {
-                    searchUsers(paramValue)
+                    searchUsers(inputSearchValue)
                         .then((res) => {
                             if (res.items.length > 0) {
                                 dispatch(setData(res.items))
@@ -73,7 +77,7 @@ export default function UserSearch({ data }) {
                             setLoading(false);
                         });
                 } else {
-                    searchRepositories(paramValue)
+                    searchRepositories(inputSearchValue)
                         .then((res) => {
                             if (res.items.length > 0) {
                                 dispatch(setData(res.items))
@@ -99,21 +103,21 @@ export default function UserSearch({ data }) {
                     setLoading(false)
                 }
             }
-            setCurrentPage(1);
+            dispatch(setCurrentPageValue(1));
         }
 
     };
 
     const redirect = (url) => {
-        setParamValue("");
+        dispatch(setInputSearch(""));
         router.push(url);
-        setCurrentPage(1);
+        dispatch(setCurrentPageValue(1));
 
     }
 
     const firstPageIndex = (currentPage - 1) * pageSize;
     const lastPageIndex = firstPageIndex + pageSize;
-    //Gets the data per page from the dataArray
+    //Gets the data per page from the dataArray.
     let slicedArray = dataArray.slice(
         firstPageIndex,
         lastPageIndex
@@ -127,7 +131,7 @@ export default function UserSearch({ data }) {
             ) : (
                 <>
                     <div className='d-flex flex-wrap justify-content-center align-items-center'>
-                        <SearchBar title={router.query.dataSearch.includes("user") ? "Users" : "Repositories"} handleSearch={handleSearch} paramValue={paramValue} setParamValue={setParamValue} setParamValueChange={setParamValueChange} />
+                        <SearchBar title={router.query.dataSearch.includes("user") ? "Users" : "Repositories"} handleSearch={handleSearch} paramValue={inputSearchValue} setParamValue={(e) => dispatch(setInputSearch(e))} setParamValueChange={setParamValueChange} />
                     </div>
                     {
                         dataArray?.length > 0 ? slicedArray.map((item, index) => {
@@ -146,7 +150,7 @@ export default function UserSearch({ data }) {
                                     : dataArray.length
                             }
                             pageSize={pageSize}
-                            onPageChange={(page) => setCurrentPage(page)}
+                            onPageChange={(page) => dispatch(setCurrentPageValue(page))}
                         />
                     )}
                     {

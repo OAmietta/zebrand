@@ -1,9 +1,18 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useDispatch } from 'react-redux'
+import { setInputSearch, setCurrentPageValue } from '../slices/index';
 
 export default function NavBar() {
     const router = useRouter();
+    const dispatch = useDispatch();
+
+    const redirect = (url) => {
+        dispatch(setInputSearch(""));
+        dispatch(setCurrentPageValue(1));
+        router.push(url);
+    }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -35,7 +44,7 @@ export default function NavBar() {
                         {
                             router.query.dataSearch?.includes("repositorie") && (
                                 <>
-                                    <button onClick={() => router.push("/userSearch")} type="button" className="btn btn-primary me-3">
+                                    <button onClick={() => redirect("/userSearch")} type="button" className="btn btn-primary me-3">
                                         Search users
                                     </button>
                                 </>
@@ -44,7 +53,7 @@ export default function NavBar() {
                         {
                             router.query.dataSearch?.includes("user") && (
                                 <>
-                                    <button onClick={() => router.push("/repositorieSearch")} type="button" className="btn btn-primary me-3">
+                                    <button onClick={() => redirect("/repositorieSearch")} type="button" className="btn btn-primary me-3">
                                         Search repositories
                                     </button>
                                 </>

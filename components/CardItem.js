@@ -16,7 +16,7 @@ export default function CardItem(props) {
                 {
                     itemData.login == undefined ? (
                         <div className="d-flex">
-                            <strong className="cGray">{`created by`}&nbsp;</strong> <p>{itemData.owner.login}</p>
+                            <strong className="cGray">{`created by`}&nbsp;</strong> <p>{itemData.owner.login.length > 15 ? name.substring(0, 15) : itemData.owner.login}</p>
                         </div>
                     ) : (
                         <div className="d-flex">
