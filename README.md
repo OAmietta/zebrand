@@ -1,4 +1,7 @@
-1. Getting Started.
+You can access the web app from the following link = https://zebrands-ch.vercel.app/
+
+1. Getting Started
+2. Technologies
 
 ## Getting Started
 
@@ -8,7 +11,7 @@
  git https://github.com/OAmietta/zebrand.git
 ```
 
-2. When the download finished, execute:
+2. When the download is finished, execute:
 
 ```bash
 cd zebrand
@@ -29,3 +32,11 @@ npm run dev
 # or
 yarn dev
 ```
+
+## Technologies
+
+- ReactJS v18.2.0 with functional components and React Hooks for lifecycle managment.
+- NextJS v12.3.1 framework with dynamic routing and server side rendering.
+- Redux toolkit for state managment.
+- Axios as an HTTP client for asynchronous fetch data.
+- Bootstrap, CSS and SCSS for styles managment and components.

@@ -10,7 +10,7 @@ export default function NavBar() {
             <div className="container">
                 <a className="navbar-brand me-2" href="/">
                     <Image
-                        src="https://zebrands.mx/wp-content/uploads/2021/07/WEB-ZEB-05-1-127x36.png"
+                        src="/assets/zebrands.png"
                         height={30}
                         width={150}
                         objectFit='contain'

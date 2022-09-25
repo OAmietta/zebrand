@@ -6,11 +6,10 @@
 
 html,
 body {
-  background-color: white;
-  /* background: url("../public/assets/bgtech.png"); */
-  /* background-position: center;
+  background: url("/assets/bgtech.png");
+  background-position: center;
   background-repeat: no-repeat;
-  background-size: cover; */
+  background-size: cover;
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,

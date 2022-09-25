@@ -4,11 +4,15 @@ import { dataValue, setData } from '../slices/index';
 import { useRouter } from 'next/dist/client/router';
 import CardItem from "../components/CardItem"
 import SearchBar from '../components/SearchBar';
-import { searchUsers, searchRepositories } from './api/services';
+import { searchUsers, searchRepositories } from '../api/services';
 import LoadingSpinner from '../components/LoadingSpinner';
 import axios from 'axios';
 import Pagination from '../components/Pagination/Pagination';
 
+/**
+ * ServerSideProps runs the fetch on the server and delivers only the data to the client side.
+ * The fecth request depends of the dynamic path value ("userSearch" or "repositorieSearch").
+ */
 export async function getServerSideProps(context) {
     const { query } = context;
     let data = [];
@@ -28,18 +32,23 @@ export async function getServerSideProps(context) {
     }
 }
 
+/**
+ * @param {array} dataArray -- Array of data from redux store.
+ * @param {string} paramValue -- Input value of the search bar.
+ * @param {boolean} paramValueChange -- (Flag) Don't search if the input value doesn't change.
+ * @param {boolean} loading -- (Flag) Shows loading spinner when true.
+ * @param {integer} currentPage -- Current page of data displayed.
+*/
+
 export default function UserSearch({ data }) {
     const router = useRouter();
-    const usersArray = useSelector(dataValue);
-    const dispatch = useDispatch();
+    const dataArray = useSelector(dataValue);
     const [paramValue, setParamValue] = useState("");
+    const [paramValueChange, setParamValueChange] = useState(false);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     let pageSize = 5;
-    /**
-     * @param {boolean} paramValueChange -- (Flag) Don't search if the input value doesn't change.
-     */
-    const [paramValueChange, setParamValueChange] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(setData(data));
@@ -98,11 +107,14 @@ export default function UserSearch({ data }) {
     const redirect = (url) => {
         setParamValue("");
         router.push(url);
+        setCurrentPage(1);
+
     }
 
     const firstPageIndex = (currentPage - 1) * pageSize;
     const lastPageIndex = firstPageIndex + pageSize;
-    let slicedArray = usersArray.slice(
+    //Gets the data per page from the dataArray
+    let slicedArray = dataArray.slice(
         firstPageIndex,
         lastPageIndex
     );
@@ -118,20 +130,20 @@ export default function UserSearch({ data }) {
                         <SearchBar title={router.query.dataSearch.includes("user") ? "Users" : "Repositories"} handleSearch={handleSearch} paramValue={paramValue} setParamValue={setParamValue} setParamValueChange={setParamValueChange} />
                     </div>
                     {
-                        usersArray?.length > 0 ? slicedArray.map((item, index) => {
+                        dataArray?.length > 0 ? slicedArray.map((item, index) => {
                             return <CardItem itemData={item} key={index} />
                         }) : <div className="d-flex justify-content-center pageContainer">
                             <LoadingSpinner />
                         </div>
                     }
-                    {usersArray?.length > 0 && (
+                    {dataArray?.length > 0 && (
                         <Pagination
                             className="pagination-bar"
                             currentPage={currentPage}
                             totalCount={
-                                usersArray?.length > 0
-                                    ? usersArray.length
-                                    : usersArray.length
+                                dataArray?.length > 0
+                                    ? dataArray.length
+                                    : dataArray.length
                             }
                             pageSize={pageSize}
                             onPageChange={(page) => setCurrentPage(page)}
